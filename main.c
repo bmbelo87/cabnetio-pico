@@ -8,8 +8,8 @@
 #include "pico/stdlib.h"
 
 #define UART_ID uart0
-#define UART_TX_PIN 12
-#define UART_RX_PIN 13
+#define UART_TX_PIN 16
+#define UART_RX_PIN 17
 #define BAUD_RATE 115200
 
 struct lampArray lamp;
@@ -36,8 +36,7 @@ void setup_outputs() {
     }
 
     gpio_init(NEON_PIN);
-    // gpio_set_dir(NEON_PIN, true); // original
-    gpio_set_dir(NEON_PIN, false);
+    gpio_set_dir(NEON_PIN, true); // original
 
     // gpio_init(COIN_COUNTER);
     // gpio_set_dir(COIN_COUNTER, true);
@@ -53,28 +52,29 @@ void setup_outputs() {
 // }
 
 void blink_lights() {
-    // for (int i = 0; i < 4; i++) {
-    //     gpio_put(pinLEDCabinet[i], 0);  
-    //     gpio_put(pinLEDCabinet[i], 1);  
-    // }
-    // gpio_put(NEON_PIN, 0);
-        // Todas começam apagadas
     for (int i = 0; i < 4; i++) {
-        gpio_put(pinLEDCabinet[i], 1); // 1 = apagado (inversão de lógica)
+        gpio_put(pinLEDCabinet[i], 0);  
+        gpio_put(pinLEDCabinet[i], 1);  
     }
+        gpio_put(NEON_PIN, 0);
+        gpio_put(NEON_PIN, 1);
+
+    //     // Todas começam apagadas
+    // for (int i = 0; i < 4; i++) {
+    //     gpio_put(pinLEDCabinet[i], 1); // 1 = apagado (inversão de lógica)
+    // }
+    //     gpio_put(NEON_PIN, 0); // Apaga o neon também
 
     // // Repete duas vezes o ciclo
-    // for (int loop = 0; loop < 2; loop++) {
     //     for (int i = 0; i < 4; i++) {
     //         // Acende a luz atual
     //         gpio_put(pinLEDCabinet[i], 0);  
-    //         sleep_ms(2000); // fica acesa por 2 segundos
+    //         sleep_ms(1000); // fica acesa por 1 segundos
 
     //         // Apaga a luz atual
     //         gpio_put(pinLEDCabinet[i], 1);
     //         sleep_ms(500); // pausa curta antes da próxima
     //     }
-    // }
 }
 
 void update_lights_from_uart() {
@@ -87,16 +87,12 @@ void update_lights_from_uart() {
         }
 
         bool neon_on = (cab_lights >> 4) & 1; // Bit 2 do segundo byte
-        gpio_put(NEON_PIN, neon_on); // ou !neon_on se inverter a lógica
-
-        // bool counter_on = (cab_lights >> 5) & 1; // Bit 4 do Segundo Byte
-        // gpio_put(COIN_COUNTER, !counter_on); // ou !counter_on se precisar interter a lógica.
+        gpio_put(NEON_PIN, !neon_on); // ou !neon_on se inverter a lógica
     }
 }
 
 int main() {
     stdio_init_all();
-    // led_on();
     setup_uart();
     setup_inputs();
     setup_outputs();

@@ -10,14 +10,13 @@ static const uint8_t pinSwitch[4] = {
 };
 
 static const uint8_t pinLEDCabinet[4] = {
-        18,      // Halo L1
-        19,      // Halo L2 // R1?
-        21,      // Halo R1
+        19,      // Halo R1
+        20,      // Halo L2
+        21,      // Halo L1
         22       // Halo R2
 };
 
-#define NEON_PIN 20
+#define NEON_PIN 18
 
-// #define COIN_COUNTER 3
 
 #endif //PIUIO_PICO_PIUIO_CONFIG_H
